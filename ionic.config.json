@@ -1,6 +1,8 @@
 {
   "name": "twitterClient",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "e5ce255c"
 }

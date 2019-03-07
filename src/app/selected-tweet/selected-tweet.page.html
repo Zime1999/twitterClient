@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-item class="content">
+        <ion-img class="iconCard" src={{singleTweet?.user?.profile_image_url}} slot="start"></ion-img>
+        <ion-label>{{singleTweet?.user?.name}}</ion-label>
+      </ion-item>
+      <ion-item-divider></ion-item-divider>
+
+      <ion-card>
+        <ion-card-content>
+          {{singleTweet?.text}}
+          <ion-item-divider></ion-item-divider>
+          Created: {{singleTweet?.created_at}}
+        </ion-card-content>
+        
+      </ion-card>
+      
+  
+</ion-content>

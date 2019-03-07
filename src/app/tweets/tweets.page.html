@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tweets</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <img class="logo" src="assets/twitterlogo.png" />
+
+<ion-searchbar #box (keyup.enter)="onEnter(box.value)" placeholder="#search"></ion-searchbar>
+
+        <ion-card *ngFor="let tweet of data" routerLink="/selected-tweet">
+          <ion-item>
+            <ion-img class="iconCard" src={{tweet.user.profile_image_url}} slot="start"></ion-img>
+            <ion-label>{{tweet.user.name}}</ion-label>
+          <ion-button class="buttonStyle" slot="end" (click)="onSelect(tweet)">
+            <ion-icon name="arrow-round-forward"></ion-icon>
+          </ion-button>
+          </ion-item>
+        
+          <ion-card-content>
+           {{tweet.text}}
+          </ion-card-content>
+        </ion-card>
+        
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+      
+
+      
+</ion-content>
