@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-back-button defaultHref="tweets"></ion-back-button>
+        </ion-buttons>
     <ion-title>Details</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -19,6 +22,7 @@
         </ion-card-content>
         
       </ion-card>
+      <ion-button (click)="click(singleTweet)">check names</ion-button>
       
   
 </ion-content>

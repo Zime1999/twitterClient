@@ -16,9 +16,11 @@ export class TwitterService {
 
   private getHeaders: Function = null;
 
+  private searchText = "#javascript";
+  
   public selectedTweet; 
 
-  constructor(public http: HttpClient) { }  
+  constructor(public http: HttpClient) {  }  
 
     /**
      * request new accessToken
@@ -29,7 +31,7 @@ export class TwitterService {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
           'Authorization': 'Basic ' + this.tokenCredentials
       });
-      return this.http.post('https://api.twitter.com/oauth2/token', 'grant_type=client_credentials', { headers })
+      return this.http.post('https://cors-anywhere.herokuapp.com/https://api.twitter.com/oauth2/token', 'grant_type=client_credentials', { headers })
           .pipe(
             map((data: any) => {
               this.getHeaders = this.prebuildHeaders(data.access_token)
@@ -52,14 +54,17 @@ export class TwitterService {
       }
   }
 
+  getSearchText(searchText){
+    this.searchText = searchText;
+  }
 
   /**
    * example method which shows the usage of curried function "getHeaders"
    * @param phrase - search phrase
    */
-  public search(phrase: string = '#javascript'): Observable<any>{
+  public search(): Observable<any>{
 
-      const searchPath = `https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(phrase)}`;
+      const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}`;
 
       const headers = this.getHeaders({ some: 'value' })
 

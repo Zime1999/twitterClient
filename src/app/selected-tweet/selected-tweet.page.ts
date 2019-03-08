@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TweetsPage } from '../tweets/tweets.page';
 import { TwitterService } from '../twitter.service';
 
 @Component({
@@ -15,9 +14,12 @@ export class SelectedTweetPage implements OnInit {
   
 
   ngOnInit() {
-
-   console.log("singletweet", this.singleTweet);
    
+  }
+
+  click(tweet){
+    console.log("tweet from html: ", tweet.user.name);
+    console.log("from service: ", this.singleTweet.user.name);
   }
 
 }
