@@ -5,8 +5,6 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-button (click)="getLocation()">Test</ion-button>
-  <p>Lat: {{lat}}</p>
   <img class="logo" src="assets/twitterlogo.png" />
 
   <ion-grid>
@@ -15,30 +13,43 @@
         <ion-searchbar [(ngModel)]="input" (keyup.enter)="checkOnEnter()" placeholder="#javascript"></ion-searchbar>
       </ion-col>
       <ion-col size="2">
-        <ion-button (click)="search()">
+        <ion-button (click)="activateFilters()" class="optionsButton">
           <ion-icon name="options"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
+    <div  *ngIf=filtersActive>
     <ion-row>
-      <ion-col size="5">
+      <ion-row>
+        <ion-col size="12">
+            <ion-item>
+                <ion-label>Location</ion-label>
+                <ion-toggle [(ngModel)]="locationToggle" (ngModelChange)="checkToggle()"></ion-toggle>
+              </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-col size="12">
         <ion-item>
           <ion-label>sort by</ion-label>
-          <ion-select [(ngModel)]="sortValue" (ionChange)="sort()">
+          <ion-select [(ngModel)]="sortValue" (ngModelChange)="sort()">
             <ion-select-option value="author">Author</ion-select-option>
             <ion-select-option value="date">Date</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
-      <ion-col size="7">
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
         <ion-item>
-          <ion-input [(ngModel)]="searchText" placeholder="search"></ion-input>
+          <ion-input [(ngModel)]="searchText" (ngModelChange)="searchInTweet()" placeholder="search"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
+  </div>
   </ion-grid>
 
-  <ion-card *ngFor="let tweet of data"  routerLink="/selected-tweet">
+
+  <ion-card *ngFor="let tweet of filteredData"  routerLink="/selected-tweet">
     <ion-item>
       <ion-img class="iconCard" src={{tweet.user.profile_image_url}} slot="start"></ion-img>
       <ion-label>{{tweet.user.name}}</ion-label>

@@ -10,16 +10,14 @@ export class SelectedTweetPage implements OnInit {
 
   constructor(private twitterService: TwitterService) { }
 
-  singleTweet = this.twitterService.selectedTweet; 
   
+  singleTweet: any;
 
   ngOnInit() {
-   
+    
   }
-
-  click(tweet){
-    console.log("tweet from html: ", tweet.user.name);
-    console.log("from service: ", this.singleTweet.user.name);
+  
+  ngDoCheck() {
+    this.singleTweet = this.twitterService.selectedTweet; 
   }
-
 }

@@ -20,6 +20,8 @@ export class TwitterService {
   
   public selectedTweet; 
 
+
+
   constructor(public http: HttpClient) {  }  
 
     /**
@@ -58,6 +60,7 @@ export class TwitterService {
     this.searchText = searchText;
   }
 
+
   /**
    * example method which shows the usage of curried function "getHeaders"
    * @param phrase - search phrase
@@ -67,7 +70,15 @@ export class TwitterService {
       const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}`;
 
       const headers = this.getHeaders({ some: 'value' })
-
+      console.log("normal", this.searchText);
       return this.http.get(searchPath, { headers });
+  }
+
+  public searchLocation(geoSearchString): Observable<any>{
+    const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}&` + geoSearchString;
+
+    const headers = this.getHeaders({ some: 'value' });
+    console.log("service location", searchPath);
+    return this.http.get(searchPath, { headers });
   }
 }
