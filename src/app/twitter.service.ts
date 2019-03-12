@@ -70,7 +70,6 @@ export class TwitterService {
       const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}`;
 
       const headers = this.getHeaders({ some: 'value' })
-      console.log("normal", this.searchText);
       return this.http.get(searchPath, { headers });
   }
 
@@ -78,7 +77,6 @@ export class TwitterService {
     const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}&` + geoSearchString;
 
     const headers = this.getHeaders({ some: 'value' });
-    console.log("service location", searchPath);
     return this.http.get(searchPath, { headers });
   }
 }

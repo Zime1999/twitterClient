@@ -1,8 +1,7 @@
 .logo {
-    width: 100px;
+    width: 200px;
     display: block;
     margin: auto;
-    margin-bottom: 30px;
 }
 
 .iconCard {
@@ -16,4 +15,12 @@
 
 .optionsButton {
     --background: #1dacff;
+}
+
+.background {
+    --background: #f9f9f9;
+}
+
+.transparent {
+    --background: rgba(0, 0, 0, 0);
 }

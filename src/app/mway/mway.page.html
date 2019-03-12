@@ -1,9 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>mway</ion-title>
+    <ion-title>m-way solutions</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="content">
+  <ion-slides pager="true" [options]="slideOpts">
+
+    <ion-slide>
+    <div class="container">
+        <h1>Messe-App</h1>  
+          <ion-img class="images" src="/assets/messeFrankfurt.jpg"></ion-img>
+          <p>Mit mobilen Funktionen wie zum Beispiel der Integration von Kalender, Adressbuch und Mail hilft die Messe Frankfurt App Ausstellern und Besuchern schneller und effizienter zusammen zu finden und sich auszutauschen.</p>
+        </div>
+    </ion-slide>
+    <ion-slide>
+    <div class="container">
+        <h1>Mutabor Audi</h1>  
+          <ion-img class="images" src="/assets/mutabor.jpg"></ion-img>
+          <p>Mit dem Experience Pass individuelle Inhalte erhalten und ein interaktives Messeerlebnis ermöglichen, welches die Nutzer begeistert.</p>
+        </div>
+    </ion-slide>
+    <ion-slide>
+        <div class="container">
+            <h1>Lern-App</h1>  
+              <ion-img class="images" src="/assets/lernnApp.jpg"></ion-img>
+              <p>Die leistungsfähige native Applikation ermöglicht ein sehr einfaches Verständnis und Zugriff auf alle relevanten chemischen Eigenschaften von Elementen. Das herausragende User Interface/ UX dieser App sorgt für eine leichte Nutzung mit einem hohen Spaßfaktor beim Lernen und Arbeiten mit dem Periodensystem.</p>
+            </div>
+        </ion-slide>
+  </ion-slides>
 
 </ion-content>

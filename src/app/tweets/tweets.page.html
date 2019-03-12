@@ -4,32 +4,33 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="background">
   <img class="logo" src="assets/twitterlogo.png" />
 
   <ion-grid>
-    <ion-row>
-      <ion-col size="10">
+    <ion-row align-items: center>
+      <ion-col size="10"> 
         <ion-searchbar [(ngModel)]="input" (keyup.enter)="checkOnEnter()" placeholder="#javascript"></ion-searchbar>
       </ion-col>
-      <ion-col size="2">
+      <ion-col size="2" align-self-center>
         <ion-button (click)="activateFilters()" class="optionsButton">
           <ion-icon name="options"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
     <div  *ngIf=filtersActive>
-    <ion-row>
-      <ion-row>
+   
+      <ion-row align-items: center>
         <ion-col size="12">
-            <ion-item>
+            <ion-item class="transparent">
                 <ion-label>Location</ion-label>
                 <ion-toggle [(ngModel)]="locationToggle" (ngModelChange)="checkToggle()"></ion-toggle>
               </ion-item>
         </ion-col>
       </ion-row>
+      <ion-row>
       <ion-col size="12">
-        <ion-item>
+        <ion-item class="transparent">
           <ion-label>sort by</ion-label>
           <ion-select [(ngModel)]="sortValue" (ngModelChange)="sort()">
             <ion-select-option value="author">Author</ion-select-option>
@@ -40,7 +41,7 @@
     </ion-row>
     <ion-row>
       <ion-col size="12">
-        <ion-item>
+        <ion-item class="transparent">
           <ion-input [(ngModel)]="searchText" (ngModelChange)="searchInTweet()" placeholder="search"></ion-input>
         </ion-item>
       </ion-col>

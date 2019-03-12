@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mway.page.scss'],
 })
 export class MwayPage implements OnInit {
-
+  slideOpts = {
+    effect: 'flip'
+  };
   constructor() { }
 
   ngOnInit() {

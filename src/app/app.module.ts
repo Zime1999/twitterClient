@@ -7,13 +7,17 @@ import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { TweetsPage } from './tweets/tweets.page';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,
+    TweetsPage
 ],
   entryComponents: [
    
@@ -22,10 +26,8 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [
     Geolocation,
     StatusBar,
-    SplashScreen,
-    
+    SplashScreen,  
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-    
   ],
   bootstrap: [AppComponent]
 })

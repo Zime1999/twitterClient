@@ -4,6 +4,7 @@ import { mergeMap } from 'rxjs/operators';
 import { LoadingController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import * as _ from 'lodash';
+import { NativePageTransitions } from '@ionic-native/native-page-transitions/ngx';
 
 
 @Component({
@@ -15,8 +16,9 @@ export class TweetsPage implements OnInit {
 
   constructor(
     private twitterService: TwitterService,
-    public loadingController: LoadingController,
-    private geolocation: Geolocation) { }
+    private loadingController: LoadingController,
+    private geolocation: Geolocation,
+    private transition: NativePageTransitions) { }
 
   data: any;
   filteredData: any;
@@ -49,7 +51,6 @@ export class TweetsPage implements OnInit {
       .subscribe((data: any) => {
         loading.dismiss();
         this.data = data.statuses;
-        console.log(data.statuses)
         this.searchInTweet();
       });
   }
@@ -68,7 +69,6 @@ export class TweetsPage implements OnInit {
       .subscribe((data: any) => {
         loading.dismiss();
         this.data = data.statuses;
-        console.log(data.statuses)
         this.searchInTweet();
       });
   }
