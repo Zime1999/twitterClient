@@ -4,8 +4,13 @@
 
 .content {
     margin-top: 20px;
+    --background: #f9f9f9;
 }
 
 ion-content {
+    --background: #f9f9f9;
+}
+
+.divider {
     --background: #f9f9f9;
 }

@@ -1,24 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { TwitterService } from '../twitter.service';
-import { mergeMap } from 'rxjs/operators';
-import { LoadingController } from '@ionic/angular';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import * as _ from 'lodash';
-import { NativePageTransitions } from '@ionic-native/native-page-transitions/ngx';
-
+import { LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tweets',
   templateUrl: './tweets.page.html',
   styleUrls: ['./tweets.page.scss'],
 })
+
 export class TweetsPage implements OnInit {
 
   constructor(
     private twitterService: TwitterService,
     private loadingController: LoadingController,
-    private geolocation: Geolocation,
-    private transition: NativePageTransitions) { }
+    private alertController: AlertController) {
+  }
 
   data: any;
   filteredData: any;
@@ -26,78 +22,66 @@ export class TweetsPage implements OnInit {
   input: string;
   sortValue: string;
   searchText: string = "";
-  lat: any;
-  long: any;
   locationToggle: Boolean;
-  geoSearchString: string;
+  geoSearchString: string = this.twitterService.geoSearchString;
+  missingData: Boolean = false;
+  
 
 
   async ngOnInit() {
-
     const loading = await this.loadingController.create({
       message: 'Loading'
     });
     await loading.present();
 
-    this.geolocation.getCurrentPosition().then(pos => {
-      this.lat = pos.coords.latitude;
-      this.long = pos.coords.longitude;
-    }).catch(err => console.log(err));
-  
-    this.twitterService.issueToken()
-      .pipe(
-        mergeMap(() => this.twitterService.search(),
-        ))
-      .subscribe((data: any) => {
-        loading.dismiss();
-        this.data = data.statuses;
-        this.searchInTweet();
-      });
+    const subscription = this.twitterService.fetchData(this.locationToggle)
+      .subscribe(
+        data => (this.data = data.statuses, this.searchInTweet()),
+        err => this.handleError());
+    subscription.add(() => loading.dismiss());
+
+    this.twitterService.activateGPS();
   }
 
-  async getDataWithLocation(){
-    this.geoSearchString = "geocode=" + this.lat + "," + this.long + "," + "5km";
-    const loading = await this.loadingController.create({
-      message: 'Loading'
+  async handleError() {
+    const alert = await this.alertController.create({
+      header: 'Something failed',
+      message: 'Please check internet-connection.',
+      buttons: [
+        {
+          text: 'Try again',
+          handler: () => {
+            this.ngOnInit();
+          }
+        },
+      ]
     });
-    await loading.present();
-    
-    this.twitterService.issueToken()
-      .pipe(
-        mergeMap(() => this.twitterService.searchLocation(this.geoSearchString),
-        ))
-      .subscribe((data: any) => {
-        loading.dismiss();
-        this.data = data.statuses;
-        this.searchInTweet();
-      });
+    await alert.present();
   }
 
-  checkToggle(){
-    if(this.locationToggle){
-      this.getDataWithLocation()
-    }
-    else {
-      this.ngOnInit();
-    }
-  }
 
-  searchInTweet() {
-    this.filteredData = _.filter(this.data, (items) => {
-      return ((_.includes(items.text.toLowerCase(), this.searchText.toLowerCase())) || (_.includes(items.user.name.toLowerCase(), this.searchText.toLowerCase())))
-    });
+  searchInTweet(): void {
+    this.data.length == 0 ? this.missingData = true : this.missingData = false;
+    this.filteredData = this.data.filter((items) => {
+      return items.text.toLowerCase().indexOf(this.searchText.toLowerCase()) != -1 ||
+        items.user.name.toLowerCase().indexOf(this.searchText.toLowerCase()) != -1;
+    })
     this.sort();
   }
 
-  
-  checkOnEnter() {
+
+  checkOnEnter(): void {
     if (this.input != "") {
       this.twitterService.getSearchText(this.input);
       this.ngOnInit();
     }
   }
 
-  activateFilters() {
+  checkToggle(): void {
+      this.ngOnInit();
+  }
+
+  activateFilters(): void {
     this.filtersActive = !this.filtersActive;
   }
 
@@ -106,7 +90,7 @@ export class TweetsPage implements OnInit {
     this.twitterService.selectedTweet = tweet;
   }
 
-  sort() {
+  sort(): void {
     if (this.sortValue == "author") {
       this.filteredData.sort((a, b) => a.user.name.localeCompare(b.user.name));
     }
@@ -115,19 +99,12 @@ export class TweetsPage implements OnInit {
     }
   }
 
-
-
-
-  doRefresh(e) {
-    this.twitterService.issueToken()
-      .pipe(
-        mergeMap(() => this.twitterService.search(),
-        ))
-      .subscribe((data: any) => {
-        this.data = data.statuses;
-        e.target.complete();
-      })
-
+  doRefresh(e: any): void {
+    const subscription = this.twitterService.fetchData(this.locationToggle)
+      .subscribe(
+        data => (this.data = data.statuses, this.searchInTweet()),
+        err => (console.log(err), this.handleError()));
+    subscription.add(() => e.target.complete())
   }
 
 

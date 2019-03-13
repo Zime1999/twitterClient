@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, merge, of, from} from 'rxjs';
 import {HttpClient, HttpHeaders} from "@angular/common/http"; //edited
-import { map } from 'rxjs/operators';
+import { map, finalize, tap } from 'rxjs/operators';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { LoadingController } from '@ionic/angular';
+import { mergeMap } from 'rxjs/operators';
 
 
 const APP_KEY = 'VJo3sQiVrCc4bMnAtELq8Mjv0';
@@ -20,13 +23,17 @@ export class TwitterService {
   
   public selectedTweet; 
 
+  public data;
 
+  constructor(
+    public http: HttpClient,
+    private geolocation: Geolocation,
+    private loadingController:LoadingController) {  }  
 
-  constructor(public http: HttpClient) {  }  
+   lat;
+   long;
+   geoSearchString: string;
 
-    /**
-     * request new accessToken
-     */
     issueToken(): Observable<any> {
 
       const headers = new HttpHeaders({
@@ -56,27 +63,38 @@ export class TwitterService {
       }
   }
 
-  getSearchText(searchText){
+  getSearchText(searchText: string){
     this.searchText = searchText;
   }
 
+  public fetchData(isToggleOn: Boolean): Observable<any> {
+    
+   return this.issueToken()
+      .pipe(
+        mergeMap(() => isToggleOn ? this.search(this.geoSearchString) : this.search("")),
+        map((data) => {
+          this.data = data;
+          return data;
+        })
+      );
+  }
 
-  /**
-   * example method which shows the usage of curried function "getHeaders"
-   * @param phrase - search phrase
-   */
-  public search(): Observable<any>{
+  public activateGPS(){
+    this.geolocation.getCurrentPosition().then(pos => {
+      this.lat = pos.coords.latitude;
+      this.long = pos.coords.longitude;
+      this.geoSearchString = `&geocode=${this.lat},${this.long},5km`;
+      console.log(this.geoSearchString);
+    }).catch(err => console.log(err));
+  }
 
-      const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}`;
+
+
+  public search(geoSearchString: string): Observable<any>{
+
+      const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}` + geoSearchString;
 
       const headers = this.getHeaders({ some: 'value' })
       return this.http.get(searchPath, { headers });
-  }
-
-  public searchLocation(geoSearchString): Observable<any>{
-    const searchPath = `https://cors-anywhere.herokuapp.com/https://api.twitter.com/1.1/search/tweets.json?q=${encodeURIComponent(this.searchText)}&` + geoSearchString;
-
-    const headers = this.getHeaders({ some: 'value' });
-    return this.http.get(searchPath, { headers });
   }
 }
